@@ -1,7 +1,8 @@
-import { SignalMediumIcon } from "lucide-react";
-import React, { useState } from "react";
-import { IoCartOutline } from "react-icons/io5";
-import { Link, NavLink } from "react-router-dom";
+import React from "react";
+import { NavLink } from "react-router-dom";
+
+import Cart from "./Cart";
+import Auth from "./Auth";
 
 const Navbar = () => {
 
@@ -53,15 +54,10 @@ const Navbar = () => {
                     <li>Contact</li>
                 </NavLink>
             </ul>
-            <Link to={'/cart'} className='relative'>
-                <IoCartOutline className='h-7 w-7' />
-                <span className='bg-red-500 px-2 rounded-full absolute -top-3 -right-3 text-white'>0</span>
-            </Link>
-            <div className='hidden md:block'>
-                {/* <SignedOut>
-                    <SignalInButton></SignalInButton>
-                </SignedOut> */}
-            </div>
+            {/* Cart */}
+            <Cart />
+            {/* Auth Section */}
+            <Auth />
         </nav>
     );
 };
