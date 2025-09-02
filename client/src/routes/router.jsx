@@ -1,16 +1,19 @@
 import React from "react";
 import { createBrowserRouter } from "react-router-dom";
-import Layout from "../components/layout/Layout";
+
+import Layout from "../components/Layout";
 import Error from "../pages/Errors/Error";
 import Home from "../pages/Home";
 import Products from "../pages/Products";
 import Cart from "../pages/Cart";
+
 import AboutUs from "../pages/AboutUs";
 import Contact from "../pages/ContactUs";
+
 import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
-import { LogOut } from "lucide-react";
 import Profile from "../pages/Auth/Profile";
+import Logout from "../pages/Auth/Logout";
 
 const router = createBrowserRouter([
     {
@@ -27,7 +30,7 @@ const router = createBrowserRouter([
             // Auth
             { path: 'login', element: <Login />},
             { path: 'register', element: <Register />},
-            { path: 'logout', element: <LogOut />},
+            { path: 'logout', element: <Logout />},
             { path: 'profile', element: <Profile />},
         ]
     }

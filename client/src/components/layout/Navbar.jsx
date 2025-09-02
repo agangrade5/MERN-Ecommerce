@@ -8,7 +8,7 @@ const Navbar = () => {
 
     return (
         <nav className="flex gap-7 items-center">
-            <ul className="md:flex gap-7 items-center text-xl font-semibold hidden">
+            <ul className="md:flex gap-7 items-center text-l font-semibold hidden">
                 <NavLink
                     to={"/"}
                     className={({ isActive }) =>
