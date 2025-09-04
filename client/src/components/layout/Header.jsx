@@ -11,12 +11,15 @@ const Header = () => {
     const [location, setLocation] = useState()
     const [openDropdown, setOpenDropdown] = useState(false)
 
+    // use env variable
+    const GEO_LOCATION_URL = import.meta.env.VITE_GEO_LOCATION_URL;
+
     const getLocation = async () => {
 
         navigator.geolocation.getCurrentPosition(async pos => {
             const { latitude, longitude } = pos.coords
             //console.log(latitude, longitude);
-            const url = `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`;
+            const url = `${GEO_LOCATION_URL}/reverse?lat=${latitude}&lon=${longitude}&format=json`;
             try {
                 const location = await axios.get(url)
                 const exactLocation = location.data.address
@@ -59,7 +62,7 @@ const Header = () => {
                     </div>
                     {
                         openDropdown ? <div className='w-[250px] h-max shadow-2xl z-50 bg-white fixed top-16 left-150 border-2 p-5 border-gray-100 rounded-md'>
-                            <h1 className='font-semibold mb-4 text-xl flex justify-between'>
+                            <h1 className='font-semibold mb-4 text-l flex justify-between'>
                                 Change Location <span onClick={toggleDropdown}><CgClose /></span>
                             </h1>
                             <button onClick={getLocation} className='bg-red-500 text-white px-3 py-1 rounded-md cursor-pointer hover:bg-red-400'>Detect my location</button>
