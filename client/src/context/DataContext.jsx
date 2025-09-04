@@ -7,8 +7,23 @@ export const DataContext = createContext(null);
 // Provider component
 export const DataProvider = ({ children }) => {
     const [products, setProducts] = useState([]);
+    const [product, setProduct] = useState({});
     // use env variable
     const FAKE_STORE_API = import.meta.env.VITE_FAKE_STORE_API;
+
+    // Fetch single product from API
+    const fetchProduct = async (id) => {
+        try {
+            const response = await axios.get(
+                `${FAKE_STORE_API}/products/${id}`
+            );
+            setProduct(response.data.product || {});
+        } catch (error) {
+            console.error("Error fetching product:", error);
+            return null;
+        }
+    };
+
     // Fetch all products from API
     const fetchProducts = async () => {
         try {
@@ -18,6 +33,7 @@ export const DataProvider = ({ children }) => {
             setProducts(response.data.products || []);
         } catch (error) {
             console.error("Error fetching products:", error);
+            return null;
         }
     };
 
@@ -33,7 +49,7 @@ export const DataProvider = ({ children }) => {
 
     return (
         <DataContext.Provider
-            value={{ products, setProducts, fetchProducts, categoryOnlyData, brandOnlyData }}
+            value={{ products, fetchProducts, product, fetchProduct, categoryOnlyData, brandOnlyData }}
         >
             {children}
         </DataContext.Provider>

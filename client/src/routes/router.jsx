@@ -14,6 +14,7 @@ import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
 import Profile from "../pages/Auth/Profile";
 import Logout from "../pages/Auth/Logout";
+import SingleProduct from "../pages/SingleProduct";
 
 const router = createBrowserRouter([
     {
@@ -24,6 +25,7 @@ const router = createBrowserRouter([
             /***** Public *****/
             { index: true, element: <Home /> },
             { path: 'products', element: <Products />},
+            { path: 'products/:id', element: <SingleProduct />},
             { path: 'cart', element: <Cart />},
             { path: 'about-us', element: <AboutUs />},
             { path: 'contact-us', element: <Contact />},
