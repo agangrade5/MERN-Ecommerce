@@ -20,9 +20,7 @@ This app supports authentication, product filtering, cart, checkout, and geoloca
 ## 🖼️ Preview
 
 ### 🏠 Home Page
-![Home Page](./assets/home-page.png)
-
-*(Add your own screenshot at `client/assets/home-page.png` or update the path above.)*
+![Home Page](../client/src/assets/home-page.png )
 
 ---
 
