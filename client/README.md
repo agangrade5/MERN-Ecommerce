@@ -1,12 +1,44 @@
-# React + Vite
+# MERN Ecommerce 🛒
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-featured **MERN stack ecommerce application** built with **React (Vite)** on the frontend, **Node.js / Express** for APIs, and **MongoDB** for the database.  
+This app supports authentication, product filtering, cart, checkout, and geolocation-based delivery info.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## ✨ Features
 
-## Expanding the ESLint configuration
+- 🔐 User authentication (Sign In / Sign Up / Profile / Logout)  
+- 📦 Product listing with pagination  
+- 🔎 Product filters (price, category, etc.)  
+- 🛒 Shopping cart with local storage persistence  
+- 💳 Checkout flow with delivery & handling charges  
+- 📍 Detect location using [Nominatim OpenStreetMap](https://nominatim.openstreetmap.org/)  
+- 📱 Responsive design (mobile-friendly navigation)  
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🖼️ Preview
+
+### 🏠 Home Page
+![Home Page](./assets/home-page.png)
+
+*(Add your own screenshot at `client/assets/home-page.png` or update the path above.)*
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend:** React, Vite, TailwindCSS  
+- **Backend:** Node.js, Express  
+- **Database:** MongoDB  
+- **API:** Fake Store API / Custom API  
+- **Icons:** React Icons, Lucide React  
+
+---
+
+## ⚙️ Setup & Installation
+
+### 1. Clone the repo
+```bash
+git clone https://github.com/agangrade5/MERN-Ecommerce.git
+cd mern-ecommerce
