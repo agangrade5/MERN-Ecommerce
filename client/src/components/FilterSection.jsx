@@ -3,7 +3,10 @@ import { useData } from '../context/DataContext'
 
 const FilterSection = ({ search, setSearch, brand, setBrand, priceRange, setPriceRange, category, setCategory, handleBrandChange, handleCategoryChange, priceRangeMin, priceRangeMax }) => {
     const { categoryOnlyData, brandOnlyData } = useData();
-
+    
+    // use env variable
+    const PRICE_CURRENCY = import.meta.env.VITE_PRICE_CURRENCY;
+    
     return (
         <div className='bg-gray-100 mt-10 p-4 rounded-md h-max hidden md:block'>
             <input type="text"
@@ -50,7 +53,7 @@ const FilterSection = ({ search, setSearch, brand, setBrand, priceRange, setPric
             {/* price range  */}
             <h1 className='mt-5 font-semibold text-l mb-3'>Price Range</h1>
             <div className='flex flex-col gap-2'>
-                <label htmlFor="">Price Range: ${priceRange[0]} - ${priceRange[1]}</label>
+                <label htmlFor="">Price Range: {PRICE_CURRENCY}{priceRange[0]} - {PRICE_CURRENCY}{priceRange[1]}</label>
                 <input 
                     type="range" 
                     min={priceRangeMin}

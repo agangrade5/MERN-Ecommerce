@@ -2,13 +2,16 @@ import React from 'react'
 import { FaFilter } from 'react-icons/fa6'
 import { useData } from '../context/DataContext'
 
-
 const MobileFilter = ({ openFilter, setOpenFilter, search, setSearch, brand, setBrand, priceRange, setPriceRange, category, setCategory, handleBrandChange, handleCategoryChange, priceRangeMin, priceRangeMax }) => {
     const { categoryOnlyData, brandOnlyData } = useData()
 
     const toggleFilter = () => {
         setOpenFilter(!openFilter)
     }
+
+    // use env variable
+    const PRICE_CURRENCY = import.meta.env.VITE_PRICE_CURRENCY;
+
     return (
         <>
             <div className='bg-gray-100 flex justify-between items-center md:hidden px-4 p-2 mt-5'>
@@ -60,7 +63,7 @@ const MobileFilter = ({ openFilter, setOpenFilter, search, setSearch, brand, set
                     {/* price range  */}
                     <h1 className='mt-5 font-semibold text-l mb-3'>Price Range</h1>
                     <div className='flex flex-col gap-2'>
-                        <label htmlFor="">Price Range: ${priceRange[0]} - ${priceRange[1]}</label>
+                        <label htmlFor="">Price Range: {PRICE_CURRENCY}{priceRange[0]} - {PRICE_CURRENCY}{priceRange[1]}</label>
                         <input 
                             type="range" 
                             min={priceRangeMin}

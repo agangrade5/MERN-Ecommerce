@@ -8,9 +8,12 @@ import Loading from "../assets/Loading4.webm"
 import { useCart } from '../context/CartContext';
 
 const SingleProduct = () => {
-    const params = useParams()
+    const params = useParams();
     const { product, fetchProduct } = useData();
-    const { addToCart } = useCart()
+    const { addToCart } = useCart();
+
+    // use env variable
+    const PRICE_CURRENCY = import.meta.env.VITE_PRICE_CURRENCY;
 
     useEffect(() => {
         fetchProduct(params.id);
@@ -42,15 +45,15 @@ const SingleProduct = () => {
                             <div className='text-gray-700'>
                                 {product.brand?.toUpperCase()} /{product.category?.toUpperCase()} /{product.model}
                             </div>
-                            <p className='text-xl text-red-500 font-bold'>${product.price} { OriginalPrice && (
+                            <p className='text-xl text-red-500 font-bold'>{PRICE_CURRENCY}{product.price} { OriginalPrice && (
                                 <>
-                                    <span className='line-through text-gray-700'>${OriginalPrice}</span> <span className='bg-red-500 text-white px-4 py-2 rounded-full'>{product.discount}% discount</span>
+                                    <span className='line-through text-gray-700'>{PRICE_CURRENCY}{OriginalPrice}</span> <span className='bg-red-500 text-white px-4 py-2 rounded-full'>{product.discount}% discount</span>
                                 </>
                                 )}
                             </p>
                             <p className='text-gray-600'>{product.description}</p>
 
-                            {/* qunatity selector */}
+                            {/* quantity selector */}
                             <div className='flex items-center gap-4'>
                                 <label htmlFor="" className='text-sm font-medium text-gray-700'>Quantity:</label>
                                 <input 

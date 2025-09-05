@@ -4,7 +4,10 @@ import { toast } from "react-toastify";
 export const CartContext = createContext(null)
 
 export const CartProvider = ({ children }) => {
-    const [cartItem, setCartItem] = useState([])
+    const [cartItem, setCartItem] = useState(() => {
+        const saved = localStorage.getItem("cartItem");
+        return saved ? JSON.parse(saved) : [];
+    });
 
     const addToCart = (product) => {
         const itemInCart = cartItem.find((item) => item.id === product.id)
@@ -36,7 +39,7 @@ export const CartProvider = ({ children }) => {
                 return newUnit > 0 ? { ...item, quantity: newUnit } : null
             }
             return item;
-        }).filter(item => item != null) // remove item qunatity 0
+        }).filter(item => item != null) // remove item quantity 0
         )
     }
 

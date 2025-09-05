@@ -15,6 +15,7 @@ import Register from "../pages/Auth/Register";
 import Profile from "../pages/Auth/Profile";
 import Logout from "../pages/Auth/Logout";
 import SingleProduct from "../pages/SingleProduct";
+import CategoryProduct from "../pages/CategoryProduct";
 
 const router = createBrowserRouter([
     {
@@ -27,6 +28,7 @@ const router = createBrowserRouter([
             { path: 'products', element: <Products />},
             { path: 'products/:id', element: <SingleProduct />},
             { path: 'cart', element: <Cart />},
+            { path: 'category/:category', element: <CategoryProduct />},
             { path: 'about-us', element: <AboutUs />},
             { path: 'contact-us', element: <Contact />},
             // Auth

@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { HiMenuAlt1, HiMenuAlt3 } from 'react-icons/hi'
 
 import Cart from "./Cart";
 import Auth from "./Auth";
 
-const Navbar = () => {
-
+const Navbar = ({ openNav, setOpenNav }) => {
     return (
         <nav className="flex gap-7 items-center">
             <ul className="md:flex gap-7 items-center text-l font-semibold hidden">
@@ -58,6 +58,11 @@ const Navbar = () => {
             <Cart />
             {/* Auth Section */}
             <Auth />
+            {
+                openNav ? <HiMenuAlt3 onClick={()=>setOpenNav(false)} className='h-7 w-7 md:hidden'/>:<HiMenuAlt1 
+                onClick={()=>setOpenNav(true)}
+                className='h-7 w-7 md:hidden'/>
+            }
         </nav>
     );
 };

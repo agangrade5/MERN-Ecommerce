@@ -5,8 +5,10 @@ import { useCart } from '../context/CartContext';
 
 const ProductCard = ({ product }) => {
     const navigate = useNavigate()
-    const { addToCart, cartItem } = useCart()
-    console.log(cartItem)
+    const { addToCart } = useCart()
+
+    // use env variable
+    const PRICE_CURRENCY = import.meta.env.VITE_PRICE_CURRENCY;
 
     return (
         <div className='border relative border-gray-100 rounded-2xl cursor-pointer hover:scale-105 hover:shadow-2xl transition-all p-2 h-max'>
@@ -23,7 +25,7 @@ const ProductCard = ({ product }) => {
             </h1>
             <p 
                 className='my-1 text-l text-gray-800 font-bold'>
-                ${product.price}
+                {PRICE_CURRENCY}{product.price}
             </p>
             <button 
                 onClick={() => addToCart(product)} 

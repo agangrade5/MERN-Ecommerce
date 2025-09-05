@@ -14,11 +14,18 @@ const Cart = () => {
     const { cartItem, updateQuantity, deleteItem } = useCart();
     const { location, detectLocation, loading } = useLocationContext();
 
+    // use env variable
+    const PRICE_CURRENCY = import.meta.env.VITE_PRICE_CURRENCY;
+    const DELIVERY_CHARGE = import.meta.env.VITE_DELIVERY_CHARGE;
+    const HANDLING_CHARGE = import.meta.env.VITE_HANDLING_CHARGE;
+
     // calculate total price
     const totalPrice = cartItem.reduce(
         (total, item) => total + item.price * item.quantity,
         0
     );
+
+    const grandTotal = Number(totalPrice) + Number(HANDLING_CHARGE);
 
     // auto-detect location on mount
     useEffect(() => {
@@ -40,7 +47,7 @@ const Cart = () => {
                                 className="bg-gray-100 p-5 rounded-md flex items-center justify-between"
                             >
                                 {/* Item Info */}
-                                <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-4 cursor-pointer" onClick={() => navigate(`/products/${item.id}`)}>
                                     <img
                                         src={item.image}
                                         alt={item.title}
@@ -49,7 +56,7 @@ const Cart = () => {
                                     <div>
                                         <h1 className="md:w-[300px] line-clamp-2">{item.title}</h1>
                                         <p className="text-red-500 font-semibold text-lg">
-                                            ${item.price}
+                                            {PRICE_CURRENCY}{item.price}
                                         </p>
                                     </div>
                                 </div>
@@ -180,7 +187,7 @@ const Cart = () => {
                                 <h1 className="flex gap-1 items-center text-gray-700">
                                     <LuNotebookText /> Items Total
                                 </h1>
-                                <p>${totalPrice}</p>
+                                <p>{PRICE_CURRENCY}{totalPrice}</p>
                             </div>
 
                             <div className="flex justify-between items-center">
@@ -188,7 +195,7 @@ const Cart = () => {
                                     <MdDeliveryDining /> Delivery Charge
                                 </h1>
                                 <p className="text-red-500 font-semibold">
-                                    <span className="text-gray-600 line-through">$25</span> FREE
+                                    <span className="text-gray-600 line-through">{PRICE_CURRENCY}{DELIVERY_CHARGE}</span> FREE
                                 </p>
                             </div>
 
@@ -196,14 +203,14 @@ const Cart = () => {
                                 <h1 className="flex gap-1 items-center text-gray-700">
                                     <GiShoppingBag /> Handling Charge
                                 </h1>
-                                <p className="text-red-500 font-semibold">$5</p>
+                                <p className="text-red-500 font-semibold">{PRICE_CURRENCY}{HANDLING_CHARGE}</p>
                             </div>
 
                             <hr className="text-gray-200 mt-2" />
 
                             <div className="flex justify-between items-center">
                                 <h1 className="font-semibold text-lg">Grand Total</h1>
-                                <p className="font-semibold text-lg">${totalPrice + 5}</p>
+                                <p className="font-semibold text-lg">{PRICE_CURRENCY}{grandTotal}</p>
                             </div>
 
                             <div>

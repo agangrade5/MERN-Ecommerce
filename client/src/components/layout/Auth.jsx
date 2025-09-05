@@ -23,7 +23,7 @@ const Auth = () => {
     }, []);
 
     return (
-        <div className="ml-5">
+        <div className="ml-5 hidden md:block">
             {!isLoggedIn ? (
                 <div className="flex gap-3">
                     <Link
@@ -50,7 +50,7 @@ const Auth = () => {
                     />
                     {/* Dropdown */}
                     {isOpen && (
-                        <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg">
+                        <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg z-50">
                             <Link
                                 to="/profile"
                                 className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
@@ -58,12 +58,6 @@ const Auth = () => {
                             >
                                 Profile
                             </Link>
-                            {/* <button
-                                onClick={handleLogout}
-                                className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-                            >
-                                Logout
-                            </button> */}
                             <Link
                                 to="/logout"
                                 className="block px-4 py-2 text-gray-700 hover:bg-gray-100"

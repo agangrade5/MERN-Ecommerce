@@ -31,7 +31,6 @@ const Products = () => {
         setCategory(e.target.value)
         setPage(1)
         setOpenFilter(false)
-
     }
     const handleBrandChange = (e) => {
         setBrand(e.target.value)
