@@ -18,7 +18,7 @@ export const DataProvider = ({ children }) => {
             const response = await axios.get(
                 `${FAKE_STORE_API}/products/${id}`
             );
-            setProduct(response.data.product || {});
+            setProduct(response.data || {});
         } catch (error) {
             console.error("Error fetching product:", error);
             return null;
@@ -29,7 +29,7 @@ export const DataProvider = ({ children }) => {
     const fetchProducts = async () => {
         try {
             const response = await axios.get(
-                `${FAKE_STORE_API}/products?limit=150`
+                `${FAKE_STORE_API}/products`
             );
             setProducts(response.data.products || []);
         } catch (error) {
@@ -52,7 +52,7 @@ export const DataProvider = ({ children }) => {
     const fetchProductsByCategory = async (category) => {
         try {
             const response = await axios.get(
-                `${FAKE_STORE_API}/products/category?type=${category}`
+                `${FAKE_STORE_API}/products/category/${category}`
             );
             setProductsByCategory(response.data.products || []);
         } catch (error) {

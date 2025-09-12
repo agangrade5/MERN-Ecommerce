@@ -19,7 +19,7 @@ const SingleProduct = () => {
         fetchProduct(params.id);
     }, [params.id]);
     
-    const OriginalPrice = product.discount && Math.round(product.price + (product.price * product.discount / 100))
+    const OriginalPrice = product.discountPercentage && Math.round(product.price + (product.price * product.discountPercentage / 100))
 
     return (
         <>
@@ -32,7 +32,7 @@ const SingleProduct = () => {
                         
                         {/* product image */}
                         <div className='w-full'>
-                            <img src={product.image}
+                            <img src={product.thumbnail}
                                 alt={product.title}
                                 className='rounded-2xl w-full object-cover' />
                         </div>
@@ -47,7 +47,7 @@ const SingleProduct = () => {
                             </div>
                             <p className='text-xl text-red-500 font-bold'>{PRICE_CURRENCY}{product.price} { OriginalPrice && (
                                 <>
-                                    <span className='line-through text-gray-700'>{PRICE_CURRENCY}{OriginalPrice}</span> <span className='bg-red-500 text-white px-4 py-2 rounded-full'>{product.discount}% discount</span>
+                                    <span className='line-through text-gray-700'>{PRICE_CURRENCY}{OriginalPrice}</span> <span className='bg-red-500 text-white px-4 py-2 rounded-full'>{product.discountPercentage}% discount</span>
                                 </>
                                 )}
                             </p>
