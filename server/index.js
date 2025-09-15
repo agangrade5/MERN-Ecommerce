@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import connectDB from "./config/db.js";
 //import fileUpload from "express-fileupload";
 import { authRouter } from './routes/index.js';
+import HttpResponse from "./utils/HttpResponse.js";
 
 // Config
 dotenv.config();
@@ -28,11 +29,12 @@ app.use(express.urlencoded({ extended: true })); // For parsing application/x-ww
 // Routes
 app.use(`/api/${process.env.API_VERSION}/auth`, authRouter);
 
+// Error handler
+app.use((req, res, next) => HttpResponse.notFound(res));
+app.use((err, req, res, next) => HttpResponse.serverError(res, err.message));
+
 // Server start
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
 });
-
-
-

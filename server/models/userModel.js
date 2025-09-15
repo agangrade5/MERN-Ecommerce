@@ -40,6 +40,10 @@ const userSchema = mongoose.Schema({
     avatar: {
         type: String
     },
-});
+    timezone: { 
+        type: String, 
+        default: "UTC" 
+    },
+}, { timestamps: true });
 
 export default mongoose.model("User", userSchema);

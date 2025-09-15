@@ -36,6 +36,13 @@ class HttpResponse {
             message
         });
     }
+
+    static serverError(res, message = "Internal server error", statusCode = 500) {
+        return res.status(statusCode).json({
+            success: false,
+            message
+        });
+    }
 }
 
 export default HttpResponse;
