@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import HttpResponse from "../utils/HttpResponse.js";
 import User from "../models/userModel.js";
-import { regex_validation, formatDateByTimezone } from "../utils/constants.js";
+import { regex_validation, formatDateByTimezone, generateOtp, getOtpExpiry } from "../utils/constants.js";
 
 // User Registration
 export const register = async (req, res, next) => {
@@ -146,3 +146,77 @@ export const login = async (req, res, next) => {
         return HttpResponse.error(res, error.message, 422);
     }
 }
+
+// Send OTP for password reset
+export const requestPasswordReset = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        if (!email) return HttpResponse.validation(res, "Email is required.");
+
+        // Check if email exists
+        const user = await User.findOne({ email: email.toLowerCase() });
+        if (!user) return HttpResponse.error(res, "Email does not exist.", 404);
+
+        // Generate OTP
+        const otp = generateOtp();
+        // Set OTP expiry
+        const expiry = getOtpExpiry();
+
+        // Save OTP & expiry
+        user.resetOtp = otp;
+        user.resetOtpExpiry = expiry;
+        await user.save();
+
+        // TODO: send OTP via Email/SMS (here just log for testing)
+        console.log(`OTP for ${email}: ${otp}`);
+
+        return HttpResponse.success(res, "OTP sent successfully.", null, 200);
+    } catch (error) {
+        return HttpResponse.error(res, error.message, 500);
+    }
+};
+
+// Verify OTP and reset password
+export const resetPassword = async (req, res) => {
+    try {
+        const { email, otp, new_password, confirm_password } = req.body;
+
+        if (!email || !otp || !new_password || !confirm_password) {
+            return HttpResponse.validation(res, "All fields are required.");
+        }
+
+        if (new_password !== confirm_password) {
+            return HttpResponse.validation(res, "Passwords do not match.");
+        }
+
+        if (!regex_validation.password.test(new_password)) {
+            return HttpResponse.validation(
+                res,
+                "Password must be at least 6 characters with uppercase, lowercase, number & special char."
+            );
+        }
+
+        const user = await User.findOne({ email: email.toLowerCase() });
+        if (!user) return HttpResponse.error(res, "User not found.", 404);
+
+        // Check OTP validity
+        if (user.resetOtp !== otp || !user.resetOtpExpiry || user.resetOtpExpiry < Date.now()) {
+            return HttpResponse.error(res, "Invalid or expired OTP.", 422);
+        }
+
+        // Hash new password
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(new_password, salt);
+
+        // Clear OTP fields
+        user.resetOtp = undefined;
+        user.resetOtpExpiry = undefined;
+
+        await user.save();
+
+        return HttpResponse.success(res, "Password reset successfully.", null, 200);
+    } catch (error) {
+        return HttpResponse.error(res, error.message, 500);
+    }
+};
