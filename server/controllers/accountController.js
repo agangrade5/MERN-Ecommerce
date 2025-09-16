@@ -77,7 +77,20 @@ export const getProfile = async (req, res, next) => {
         if (!user) {
             return HttpResponse.error(res, "User not found.", 422);
         }
-        return HttpResponse.success(res, "User profile.", user, 200);
+        // Response
+        return HttpResponse.success(
+            res, 
+            "User profile.", 
+            { 
+                id: user._id, 
+                full_name: user.full_name,
+                email: user.email, 
+                avatar: user.avatar, 
+                created_at: formatDateByTimezone(user.createdAt, user.timezone),
+                updated_at: formatDateByTimezone(user.updatedAt, user.timezone),
+            }, 
+            200
+        );
     } catch (error) {
         return HttpResponse.error(res, error.message, 422);
     }
@@ -156,7 +169,19 @@ export const changeAvatar = async (req, res, next) => {
             return HttpResponse.error(res, "Avatar couldn't be changed.", 422);
         }
         // Response
-        return HttpResponse.success(res, "Avatar changed successfully.", updatedAvatar, 200);
+        return HttpResponse.success(
+            res, 
+            "Avatar changed successfully.", 
+            { 
+                id: updatedAvatar._id, 
+                full_name: updatedAvatar.full_name,
+                email: updatedAvatar.email, 
+                avatar: updatedAvatar.avatar, 
+                created_at: formatDateByTimezone(updatedAvatar.createdAt, updatedAvatar.timezone),
+                updated_at: formatDateByTimezone(updatedAvatar.updatedAt, updatedAvatar.timezone),
+            }, 
+            200
+        );
     } catch (err) {
         return HttpResponse.error(res, err.message, 422);
     }

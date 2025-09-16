@@ -78,7 +78,7 @@ export const register = async (req, res, next) => {
 // User Login
 export const login = async (req, res, next) => {
     try {
-        const { email, password } = req.body;
+        const { email, password, timezone } = req.body;
 
         if (!email || !password) {
             return HttpResponse.validation(res, "All fields are required.");
@@ -110,6 +110,10 @@ export const login = async (req, res, next) => {
             sameSite: "none"
         });
 
+        // Set timezone
+        user.timezone = timezone;
+        await user.save();
+
         // Response
         return HttpResponse.success(
             res, 
@@ -120,6 +124,7 @@ export const login = async (req, res, next) => {
                 email: user.email, 
                 avatar: user.avatar, 
                 created_at: formatDateByTimezone(user.createdAt, user.timezone),
+                updated_at: formatDateByTimezone(user.updatedAt, user.timezone),
                 token 
             }, 
             200

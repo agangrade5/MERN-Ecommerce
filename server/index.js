@@ -19,6 +19,8 @@ const app = express();
 // Middleware & Body parser
 app.use(express.json({ extended: true })); // For parsing application/json
 app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
+
+// Cookie parser
 app.use(cookieParser()); // For parsing cookies
 
 // CORS config for development
