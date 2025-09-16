@@ -103,7 +103,12 @@ export const login = async (req, res, next) => {
 
         // Create and assign token
         const token = jwt.sign({ id: user._id, full_name: user.full_name }, process.env.JWT_SECRET, { expiresIn: "1d" }); // expires in 1 day
-        res.cookie("token", token, { httpOnly: true, secure: true, sameSite: "none" });
+        // cookie config
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none"
+        });
 
         // Response
         return HttpResponse.success(
