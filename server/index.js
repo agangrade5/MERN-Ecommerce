@@ -24,7 +24,7 @@ app.use(express.urlencoded({ extended: true })); // For parsing application/x-ww
 app.use(cookieParser()); // For parsing cookies
 
 // CORS config for development
-//app.use(cors({ credentials: true, origin: process.env.CLIENT_URL })); // For development
+app.use(cors({ credentials: true, origin: process.env.CLIENT_URL })); // For development
 
 // File upload config
 app.use(fileUpload()); // For parsing multipart/form-data
