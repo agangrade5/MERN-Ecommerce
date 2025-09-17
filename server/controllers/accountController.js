@@ -128,9 +128,9 @@ export const updateProfile = async (req, res, next) => {
 
         user.full_name = full_name;
         user.email = newEmail;
-        await user.save();
+        const updatedUser = await user.save();
 
-        return HttpResponse.success(res, "Profile updated successfully.", null, 200);
+        return HttpResponse.success(res, "Profile updated successfully.", updatedUser, 200);
     } catch (error) {
         return HttpResponse.error(res, error.message, 422);
     }

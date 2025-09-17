@@ -5,7 +5,7 @@ import { UserContext } from "../../context/UserContext";
 
 const Profile = () => {
     const { currentUser } = useContext(UserContext);
-    
+
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-100">
             <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md text-center">
@@ -23,7 +23,7 @@ const Profile = () => {
                     {new Intl.DateTimeFormat("en-IN", {
                         dateStyle: "medium",
                         timeStyle: "short",
-                    }).format(new Date(currentUser.created_at))}
+                    }).format(new Date(currentUser.updated_at))}
                 </p>
 
                 {/* Actions */}
