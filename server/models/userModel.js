@@ -44,10 +44,10 @@ const userSchema = mongoose.Schema({
         type: String, 
         default: "UTC" 
     },
-    resetOtp: { 
+    otp: { 
         type: String 
     },
-    resetOtpExpiry: { 
+    otp_expiry: { 
         type: Date 
     },
 }, { timestamps: true });

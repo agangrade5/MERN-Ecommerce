@@ -164,12 +164,12 @@ export const requestPasswordReset = async (req, res) => {
         const expiry = getOtpExpiry();
 
         // Save OTP & expiry
-        user.resetOtp = otp;
-        user.resetOtpExpiry = expiry;
+        user.otp = otp;
+        user.otp_expiry = expiry;
         await user.save();
 
-        // TODO: send OTP via Email/SMS (here just log for testing)
-        console.log(`OTP for ${email}: ${otp}`);
+        // send OTP via Email/SMS (here just log for testing)
+        console.log(`Send OTP ${otp} to ${email}`);
 
         return HttpResponse.success(res, "OTP sent successfully.", null, 200);
     } catch (error) {
@@ -201,7 +201,7 @@ export const resetPassword = async (req, res) => {
         if (!user) return HttpResponse.error(res, "User not found.", 404);
 
         // Check OTP validity
-        if (user.resetOtp !== otp || !user.resetOtpExpiry || user.resetOtpExpiry < Date.now()) {
+        if (user.otp !== otp || !user.otp_expiry || user.otp_expiry < Date.now()) {
             return HttpResponse.error(res, "Invalid or expired OTP.", 422);
         }
 
@@ -210,8 +210,8 @@ export const resetPassword = async (req, res) => {
         user.password = await bcrypt.hash(new_password, salt);
 
         // Clear OTP fields
-        user.resetOtp = undefined;
-        user.resetOtpExpiry = undefined;
+        user.otp = undefined;
+        user.otp_expiry = undefined;
 
         await user.save();
 
