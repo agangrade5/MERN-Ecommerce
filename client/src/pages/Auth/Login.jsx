@@ -36,7 +36,7 @@ const Login = () => {
         try {
             const res = await loginUser(form);
             toast.success(res.data.message);
-            setCurrentUser(res.data);
+            setCurrentUser(res.data.data);
             setTimeout(() => navigate("/"), 2000);
         } catch (err) {
             console.log(err);

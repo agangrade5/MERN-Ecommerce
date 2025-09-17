@@ -7,7 +7,7 @@ const ProtectedRoute = () => {
     const { currentUser } = useContext(UserContext);
 
     // If not logged in → redirect to login
-    if (currentUser?.data.token === null || currentUser?.data.token === undefined) 
+    if (currentUser?.token === null || currentUser?.token === undefined) 
     {
         return <Navigate to="/login" replace />;
     }

@@ -125,7 +125,8 @@ export const login = async (req, res, next) => {
                 avatar: user.avatar, 
                 created_at: formatDateByTimezone(user.createdAt, user.timezone),
                 updated_at: formatDateByTimezone(user.updatedAt, user.timezone),
-                token 
+                timezone: user.timezone,
+                token
             }, 
             200
         );

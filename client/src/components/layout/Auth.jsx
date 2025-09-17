@@ -6,7 +6,6 @@ import { UserContext } from "../../context/UserContext";
 import { logoutUser } from "../../api/account";
 
 const Auth = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(true); // change after login
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef();
 
@@ -59,11 +58,12 @@ const Auth = () => {
                 <div className="relative" ref={menuRef}>
                     {/* Profile Image */}
                     <img
-                        src="https://i.pravatar.cc/40"
-                        alt="profile"
                         className="w-10 h-10 rounded-full cursor-pointer"
+                        src={`${import.meta.env.VITE_REACT_APP_ASSETS_URL}/uploads/avatars/${currentUser?.avatar || "default-avatar.png"}`}
+                        alt={currentUser?.full_name || "Author"}
                         onClick={() => setIsOpen(!isOpen)}
                     />
+
                     {/* Dropdown */}
                     {isOpen && (
                         <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-lg z-50">

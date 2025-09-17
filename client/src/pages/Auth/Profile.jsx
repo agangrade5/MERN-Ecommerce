@@ -1,35 +1,39 @@
-import React from "react";
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+
+import { UserContext } from "../../context/UserContext";
 
 const Profile = () => {
-    // Later: fetch user data from API / context
-    const user = {
-        name: "Amit Gangrade",
-        email: "amit@example.com",
-        avatar: "https://i.pravatar.cc/100",
-    };
-
+    const { currentUser } = useContext(UserContext);
+    
     return (
         <div className="flex justify-center items-center min-h-screen bg-gray-100">
             <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md text-center">
                 {/* Avatar */}
                 <img
-                    src={user.avatar}
-                    alt="User Avatar"
                     className="w-24 h-24 rounded-full mx-auto mb-4"
+                    src={`${import.meta.env.VITE_REACT_APP_ASSETS_URL}/uploads/avatars/${currentUser?.avatar || "default-avatar.png"}`}
+                    alt={currentUser?.full_name || "Author"}
                 />
 
                 {/* User Info */}
-                <h2 className="text-2xl font-bold">{user.name}</h2>
-                <p className="text-gray-600">{user.email}</p>
+                <h2 className="text-2xl font-bold">{currentUser.full_name}</h2>
+                <p className="text-gray-600">{currentUser.email}</p>
+                <p className="text-gray-600">
+                    {new Intl.DateTimeFormat("en-IN", {
+                        dateStyle: "medium",
+                        timeStyle: "short",
+                    }).format(new Date(currentUser.created_at))}
+                </p>
 
                 {/* Actions */}
                 <div className="mt-6 flex flex-col gap-3">
-                    <button className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition">
+                    <Link to="/edit-profile" className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition">
                         Edit Profile
-                    </button>
-                    <button className="w-full border border-gray-300 py-2 rounded-lg hover:bg-gray-100 transition">
+                    </Link>
+                    <Link to="/change-password" className="w-full border border-gray-300 py-2 rounded-lg hover:bg-gray-100 transition">
                         Change Password
-                    </button>
+                    </Link>
                 </div>
             </div>
         </div>
