@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { RouterProvider } from 'react-router-dom'
 import router from './routes/router'
 import { useCart } from './context/CartContext';
+import UserProvider from './context/UserContext.jsx'
 
 const App = () => {
     const { cartItem, setCartItem } = useCart();
@@ -13,7 +14,9 @@ const App = () => {
 
     return (
         <>
-            <RouterProvider router={router} />
+            <UserProvider>
+                <RouterProvider router={router} />
+            </UserProvider>
         </>
     )
 }

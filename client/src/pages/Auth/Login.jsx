@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import { loginUser } from "../../api/auth";
+import { UserContext } from "../../context/UserContext";
 
 const Login = () => {
     const [form, setForm] = useState({
@@ -13,6 +14,8 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
+
+    const { setCurrentUser } = useContext(UserContext);
 
     useEffect(() => {
         // Detect timezone on page load
@@ -33,6 +36,7 @@ const Login = () => {
         try {
             const res = await loginUser(form);
             toast.success(res.data.message);
+            setCurrentUser(res.data);
             setTimeout(() => navigate("/"), 2000);
         } catch (err) {
             console.log(err);

@@ -9,8 +9,3 @@ export const registerUser = async (data) => {
 export const loginUser = async (data) => {
     return await api.post("/auth/login", data);
 };
-
-// Logout User (for later use)
-export const logoutUser = async () => {
-    return await api.post("/auth/logout");
-};

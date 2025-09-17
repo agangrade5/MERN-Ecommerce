@@ -1,14 +1,30 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useRef, useEffect, useContext, use } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+
+import { UserContext } from "../../context/UserContext";
+import { logoutUser } from "../../api/account";
 
 const Auth = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(true); // change after login
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef();
 
-    const handleLogout = () => {
-        setIsLoggedIn(false);
-        setIsOpen(false);
+    const navigate = useNavigate();
+
+    const { currentUser, setCurrentUser } = useContext(UserContext);
+
+    const handleLogout = async () => {
+        try {
+            await logoutUser();
+            setCurrentUser(null); // update context
+            setIsOpen(false);
+            toast.success("Logged out successfully");
+            navigate("/login");
+        } catch (error) {
+            console.error("Error logging out:", error);
+            toast.error("Failed to logout. Try again.");
+        }
     };
 
     // Close dropdown when clicking outside
@@ -24,7 +40,7 @@ const Auth = () => {
 
     return (
         <div className="ml-5 hidden md:block">
-            {!isLoggedIn ? (
+            {!currentUser ? (
                 <div className="flex gap-3">
                     <Link
                         to="/login"
@@ -58,13 +74,12 @@ const Auth = () => {
                             >
                                 Profile
                             </Link>
-                            <Link
-                                to="/logout"
-                                className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                            <button
+                                className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"
                                 onClick={handleLogout}
                             >
                                 Logout
-                            </Link>
+                            </button>
                         </div>
                     )}
                 </div>
