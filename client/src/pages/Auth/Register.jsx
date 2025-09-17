@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { registerUser } from "../../api/auth";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+
+import { registerUser } from "../../api/auth";
 
 const Register = () => {
     const [form, setForm] = useState({
@@ -15,12 +16,20 @@ const Register = () => {
 
     const navigate = useNavigate();
 
+    useEffect(() => {
+        // Detect timezone on page load
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        setForm((prev) => ({ ...prev, timezone: tz }));
+    }, []);
+
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (loading) return; 
         setLoading(true);
 
         try {
@@ -39,7 +48,8 @@ const Register = () => {
             }
             toast.error(errorMessage);
         } finally {
-            setLoading(false);
+            // small delay (1s) before enabling again
+            setTimeout(() => setLoading(false), 2000);
         }
     };
 
@@ -81,6 +91,11 @@ const Register = () => {
                         onChange={handleChange}
                         placeholder="Confirm Password"
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    />
+                    <input
+                        type="hidden"
+                        name="timezone"
+                        value={form.timezone}
                     />
                     <button
                         type="submit"
