@@ -38,17 +38,24 @@ const userSchema = mongoose.Schema({
         ],
     },
     avatar: {
-        type: String
+        type: String,
+        default: "default-avatar.png",
     },
     timezone: { 
         type: String, 
         default: "UTC" 
     },
     otp: { 
-        type: String 
+        type: String,
+        default: null 
     },
     otp_expiry: { 
-        type: Date 
+        type: Date,
+        default: null
+    },
+    refreshToken: {
+        type: String,
+        default: null
     },
 }, { timestamps: true });
 

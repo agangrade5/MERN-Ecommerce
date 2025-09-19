@@ -95,7 +95,7 @@ const EditProfile = () => {
                 ...currentUser,
                 full_name: form.full_name,
                 email: form.email,
-                updated_at: res.data.data.updatedAt
+                updated_at: res.data.data.updated_at
             });
             navigate("/profile");
         } catch (err) {

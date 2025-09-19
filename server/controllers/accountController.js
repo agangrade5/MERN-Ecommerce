@@ -3,16 +3,31 @@ import HttpResponse from "../utils/HttpResponse.js";
 import User from "../models/userModel.js";
 import { regex_validation, formatDateByTimezone } from "../utils/constants.js";
 import { saveFile, deleteFile } from "../helper/fileHelper.js";
+import { verifyRefreshToken } from "../config/jwt.js";
 
 // User Logout
 export const logout = async (req, res, next) => {
     try {
-        // Delete token
-        res.clearCookie("token");
+        const { refreshToken } = req.cookies;
+        
+        // If refresh token exists, remove it from database
+        if (refreshToken) {
+            const decoded = verifyRefreshToken(refreshToken);
+            await User.findByIdAndUpdate(decoded.id, { 
+                $unset: { refreshToken: 1 } 
+            });
+        }
+
+        // Clear cookies
+        res.clearCookie("accessToken");
+        res.clearCookie("refreshToken");
 
         return HttpResponse.success(res, "User logged out successfully.", null, 200);
     } catch (error) {
-        return HttpResponse.error(res, error.message, 422);
+        // Even if token verification fails, clear cookies and return success
+        res.clearCookie("accessToken");
+        res.clearCookie("refreshToken");
+        return HttpResponse.success(res, "User logged out successfully.", null, 200);
     }
 }
 
@@ -121,8 +136,12 @@ export const updateProfile = async (req, res, next) => {
 
         // Check if email exists
         const newEmail = email.toLowerCase();
-        const existingEmail = await User.findOne({ email: newEmail });
-        if (existingEmail && existingEmail._id.toString() !== req.user.id) {
+        const existingEmail = await User.findOne({ 
+            email: newEmail,
+            _id: { $ne: req.user.id } // Use req.user.id directly
+        });
+
+        if (existingEmail) {
             return HttpResponse.error(res, "Email already exists.", 422);
         }
 
@@ -130,7 +149,14 @@ export const updateProfile = async (req, res, next) => {
         user.email = newEmail;
         const updatedUser = await user.save();
 
-        return HttpResponse.success(res, "Profile updated successfully.", updatedUser, 200);
+        return HttpResponse.success(res, "Profile updated successfully.", {
+            id: updatedUser._id,
+            full_name: updatedUser.full_name,
+            email: updatedUser.email,
+            avatar: updatedUser.avatar,
+            created_at: formatDateByTimezone(updatedUser.createdAt, updatedUser.timezone),
+            updated_at: formatDateByTimezone(updatedUser.updatedAt, updatedUser.timezone),
+        }, 200);
     } catch (error) {
         return HttpResponse.error(res, error.message, 422);
     }
@@ -148,11 +174,6 @@ export const changeAvatar = async (req, res, next) => {
         const user = await User.findById(req.user.id);
         if (!user) {
             return HttpResponse.error(res, "User not found.", 422);
-        }
-
-        // Check if user is updating their own account
-        if (user._id.toString() !== req.user.id) {
-            return HttpResponse.error(res, "You can only update your own account.", 422);
         }
 
         // save avatar
@@ -211,5 +232,3 @@ export const deleteAccount = async (req, res, next) => {
         return HttpResponse.error(res, error.message, 422);
     }
 }
-
-

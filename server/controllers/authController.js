@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import HttpResponse from "../utils/HttpResponse.js";
 import User from "../models/userModel.js";
 import { regex_validation, formatDateByTimezone, generateOtp, getOtpExpiry } from "../utils/constants.js";
+import { generateAccessToken, generateRefreshToken, verifyRefreshToken, getMilliseconds } from "../config/jwt.js";
 
 // User Registration
 export const register = async (req, res, next) => {
@@ -102,17 +103,27 @@ export const login = async (req, res, next) => {
         }
 
         // Create and assign token
-        const token = jwt.sign({ id: user._id, full_name: user.full_name }, process.env.JWT_SECRET, { expiresIn: "1d" }); // expires in 1 day
-        // cookie config
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: true,
-            sameSite: "none"
-        });
-
+        const accessToken = generateAccessToken(user);
+        const refreshToken = generateRefreshToken(user);
+        
         // Set timezone
         user.timezone = timezone;
+        user.refreshToken = refreshToken;
         await user.save();
+
+        // Set cookies
+        res.cookie("accessToken", accessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.JWT_SAME_SITE,
+            maxAge: getMilliseconds(process.env.JWT_ACCESS_TOKEN_EXPIRE) // Convert to milliseconds
+        });
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.JWT_SAME_SITE,
+            maxAge: getMilliseconds(process.env.JWT_REFRESH_TOKEN_EXPIRE) // Convert to milliseconds
+        });
 
         // Response
         return HttpResponse.success(
@@ -126,7 +137,7 @@ export const login = async (req, res, next) => {
                 created_at: formatDateByTimezone(user.createdAt, user.timezone),
                 updated_at: formatDateByTimezone(user.updatedAt, user.timezone),
                 timezone: user.timezone,
-                token
+                accessToken
             }, 
             200
         );
@@ -147,6 +158,68 @@ export const login = async (req, res, next) => {
         return HttpResponse.error(res, error.message, 422);
     }
 }
+
+// Refresh Token
+export const refreshToken = async (req, res) => {
+    try {
+        const { refreshToken } = req.cookies;
+
+        if (!refreshToken) {
+            return HttpResponse.error(res, "Refresh token not provided.", 401);
+        }
+
+        // Verify refresh token
+        const decoded = verifyRefreshToken(refreshToken);
+        // Find user and verify refresh token
+        const user = await User.findById(decoded.id);
+        if (!user || user.refreshToken !== refreshToken) {
+            return HttpResponse.error(res, "Invalid refresh token.", 403);
+        }
+
+        // Generate new tokens
+        const { accessToken, refreshToken: newRefreshToken } = generateTokens(user._id, user.full_name);
+
+        // Update refresh token in database
+        user.refreshToken = newRefreshToken;
+        await user.save();
+
+        // Set new cookies
+        res.cookie("accessToken", accessToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.JWT_SAME_SITE,
+            maxAge: getMilliseconds(process.env.JWT_ACCESS_TOKEN_EXPIRE) // Convert to milliseconds
+        });
+
+        res.cookie("refreshToken", newRefreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: process.env.JWT_SAME_SITE,
+            maxAge: getMilliseconds(process.env.JWT_REFRESH_TOKEN_EXPIRE) // Convert to milliseconds
+        });
+
+        return HttpResponse.success(
+            res,
+            "Token refreshed successfully.",
+            {
+                id: user._id,
+                full_name: user.full_name,
+                email: user.email,
+                avatar: user.avatar,
+                created_at: formatDateByTimezone(user.createdAt, user.timezone),
+                updated_at: formatDateByTimezone(user.updatedAt, user.timezone),
+                timezone: user.timezone,
+                accessToken
+            },
+            200
+        );
+    } catch (error) {
+        if (error.name === "JsonWebTokenError" || error.name === "TokenExpiredError") {
+            return HttpResponse.error(res, "Invalid or expired refresh token.", 403);
+        }
+        return HttpResponse.error(res, error.message, 500);
+    }
+};
 
 // Send OTP for password reset
 export const requestPasswordReset = async (req, res) => {
