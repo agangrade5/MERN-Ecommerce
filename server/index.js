@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 
 import connectDB from "./config/db.js";
 import fileUpload from "express-fileupload";
-import { authRouter, accountRouter } from './routes/index.js';
+import { authRouter, accountRouter, webRouter } from './routes/index.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 // Config
@@ -33,6 +33,7 @@ app.use('/uploads', express.static('uploads')); // For serving static files
 // Routes
 app.use(`/api/${process.env.API_VERSION}/auth`, authRouter);
 app.use(`/api/${process.env.API_VERSION}/account`, accountRouter);
+app.use(`/api/${process.env.API_VERSION}`, webRouter);
 
 // Error handling
 app.use(notFound);
