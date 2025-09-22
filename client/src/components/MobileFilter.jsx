@@ -55,7 +55,7 @@ const MobileFilter = ({ openFilter, setOpenFilter, search, setSearch, brand, set
                     >
                         {
                             brandOnlyData?.map((item, index) => {
-                                return <option key={index} value={item}>{item.toUpperCase()}</option>
+                                return <option key={index} value={item}>{item}</option>
                             })
                         }
                     </select>

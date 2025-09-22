@@ -1,17 +1,25 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
+import { toast } from "react-toastify";
+import { logoutUser } from "../api/account";
+
 
 const ResponsiveMenu = ({ openNav, setOpenNav }) => {
-    const isLoggedIn = true; // TODO: replace with actual auth state
-    const user = {
-        firstName: "Amit",
-        lastName: "Gangrade",
-    };
-
-    const handleLogout = () => {
-        // clear token or session
-        console.log("Logged out");
-        setOpenNav(false);
+    const { currentUser, setCurrentUser } = useContext(UserContext);
+    const navigate = useNavigate();
+    
+    const handleLogout = async () => {
+        try {
+            await logoutUser();
+            setCurrentUser(null); // update context
+            setOpenNav(false);
+            toast.success("Logged out successfully");
+            navigate("/login");
+        } catch (error) {
+            console.error("Error logging out:", error);
+            toast.error("Failed to logout. Try again.");
+        }
     };
 
     return (
@@ -22,16 +30,16 @@ const ResponsiveMenu = ({ openNav, setOpenNav }) => {
         >
             <div>
                 {/* User Info (only if logged in) */}
-                {isLoggedIn && (
+                {currentUser && (
                     <div className="flex items-center justify-start gap-3">
                         <img
-                            src="https://i.pravatar.cc/40"
-                            alt="profile"
                             className="w-12 h-12 rounded-full cursor-pointer"
+                            src={`${import.meta.env.VITE_REACT_APP_ASSETS_URL}/uploads/avatars/${currentUser?.avatar || "default-avatar.png"}`}
+                            alt={currentUser?.full_name || "Author"}
                         />
                         <div>
-                            <h1>Hello, {user?.firstName}</h1>
-                            <h1 className="text-sm text-slate-500">Premium User</h1>
+                            <h1>Hello, {currentUser?.full_name}</h1>
+                            {/* <h1 className="text-sm text-slate-500">Premium User</h1> */}
                         </div>
                     </div>
                 )}
@@ -53,7 +61,7 @@ const ResponsiveMenu = ({ openNav, setOpenNav }) => {
                         </Link>
 
                         {/* Auth Links */}
-                        {!isLoggedIn ? (
+                        {!currentUser ? (
                             <>
                                 <Link
                                     to="/login"

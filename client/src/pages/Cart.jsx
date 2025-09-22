@@ -49,7 +49,7 @@ const Cart = () => {
                                 {/* Item Info */}
                                 <div className="flex items-center gap-4 cursor-pointer" onClick={() => navigate(`/products/${item.id}`)}>
                                     <img
-                                        src={item.image}
+                                        src={item.images[0]}
                                         alt={item.title}
                                         className="w-20 h-20 rounded-md"
                                     />

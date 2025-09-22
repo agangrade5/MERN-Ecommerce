@@ -7,6 +7,7 @@ import { DataProvider } from './context/DataContext.jsx'
 import { CartProvider } from './context/CartContext.jsx'
 import { ToastContainer } from 'react-toastify'
 import ScrollToTop from 'react-scroll-to-top'
+import { register } from './serviceWorkerRegistration.js'
 
 
 createRoot(document.getElementById('root')).render(
@@ -33,3 +34,14 @@ createRoot(document.getElementById('root')).render(
         </LocationProvider>
     </StrictMode>,
 )
+
+// Register service worker with callbacks
+/* register({
+    onSuccess: () => {
+        console.log('App is cached and ready for offline use!');
+    },
+    onUpdate: (registration) => {
+        console.log('New version available!');
+        // You can show a toast notification here
+    }
+}); */
