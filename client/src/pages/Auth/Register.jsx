@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import { registerUser } from "../../api/auth";
+import PasswordInput from "../../components/PasswordInput";
 
 const Register = () => {
     const [form, setForm] = useState({
@@ -76,16 +77,14 @@ const Register = () => {
                         placeholder="Email"
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     />
-                    <input
-                        type="password"
+                    <PasswordInput
                         name="password"
                         value={form.password}
                         onChange={handleChange}
                         placeholder="Password"
                         className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                     />
-                    <input
-                        type="password"
+                    <PasswordInput
                         name="confirm_password"
                         value={form.confirm_password}
                         onChange={handleChange}

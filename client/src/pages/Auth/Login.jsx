@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 
 import { loginUser } from "../../api/auth";
 import { UserContext } from "../../context/UserContext";
+import PasswordInput from "../../components/PasswordInput";
 
 const Login = () => {
     const [form, setForm] = useState({
@@ -70,11 +71,10 @@ const Login = () => {
                         onChange={handleChange}
                         autoFocus
                     />
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                    <PasswordInput
+                        id="password"
                         name="password"
+                        placeholder="Password"
                         value={form.password}
                         onChange={handleChange}
                     />

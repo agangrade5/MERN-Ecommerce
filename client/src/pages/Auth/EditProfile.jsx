@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { UserContext } from "../../context/UserContext";
 import { updateProfile, changeAvatar } from "../../api/account";
@@ -207,9 +207,24 @@ const EditProfile = () => {
                         disabled={loading}
                         className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition disabled:opacity-50"
                     >
-                        {loading ? "Updating..." : "Update Profile"}
+                        {loading ? (
+                            <div className="flex items-center justify-center">
+                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                                Updating...
+                            </div>
+                        ) : (
+                            "Update Profile"
+                        )}
                     </button>
                 </form>
+                <div className="text-center mt-6">
+                    <Link 
+                        to="/profile" 
+                        className="text-red-500 hover:text-red-600 text-sm font-medium transition duration-200"
+                    >
+                        ← Back to Profile
+                    </Link>
+                </div>
             </div>
         </div>
     );
