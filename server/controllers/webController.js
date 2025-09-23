@@ -16,7 +16,7 @@ export const contactUs = async (req, res) => {
             return HttpResponse.validation(res, "Please provide a valid email.");
         }
         if (!regex_validation.message.test(message)) {
-            return HttpResponse.validation(res, "Message must contain only letters, numbers and spaces.");
+            return HttpResponse.validation(res, "Message must contain only letters, numbers, spaces and maximum of 500 characters.");
         }
 
         // Create a test account or replace with real credentials.
