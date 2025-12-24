@@ -11,7 +11,7 @@ export const regex_validation = {
 
 export const formatDateByTimezone = (date, timezone = "UTC") => {
     return moment(date).tz(timezone).format("YYYY-MM-DD HH:mm:ss");
-};
+}; 
 
 // OTP Config (dynamic from .env with fallbacks)
 export const otpConfig = {
