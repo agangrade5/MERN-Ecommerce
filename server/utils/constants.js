@@ -22,7 +22,7 @@ export const otpConfig = {
     type: process.env.OTP_TYPE || "numeric", // "numeric" | "alphanumeric"
 };
 
-// Generate OTP 
+// Generate OTP
 export const generateOtp = () => {
     if (otpConfig.is_default) {
         return otpConfig.default.toString().padStart(otpConfig.otp_length, "0");
